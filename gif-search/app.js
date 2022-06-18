@@ -1,10 +1,12 @@
 // Require Libraries
 const express = require('express');
-
+require('dotenv').config();
+console.log("process.env", process.env);
 // Require tenorjs near the top of the file
 const Tenor = require("tenorjs").client({
     // Replace with your own key
-    "Key": "AIzaSyCN00VQa2GAaa9rPbP9DkhEJhuK1MD0lKs", // https://tenor.com/developer/keyregistration
+    // "Key": "AIzaSyCN00VQa2GAaa9rPbP9DkhEJhuK1MD0lKs", // https://tenor.com/developer/keyregistration
+    "Key": process.env.KEY, // https://tenor.com/developer/keyregistration
     "Filter": "off", // "off", "low", "medium", "high", not case sensitive
     "Locale": "en_US", // Your locale here, case-sensitivity depends on input
 });
@@ -13,19 +15,26 @@ const Tenor = require("tenorjs").client({
 const app = express();
 
 // Middleware
-const exphbs = require("express-handlebars");
+const { engine, create} = require("express-handlebars");
 
 // app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 // app.set('view engine', 'handlebars');
 
-// app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs" })); 
-// app.set("view engine", "hbs");
+app.engine(".hbs", engine({ defaultLayout: "main", extname: ".hbs" })); 
+app.set("view engine", ".hbs");
+app.set('views', './views');
 
-const hbs = exphbs.create({
-    defaultLayout: 'main',
-});
+// const hbs = exphbs.create({
+//     defaultLayout: 'main',
+//     extname: "hbs"
+// });
 
-app.engine('handlebars', hbs.engine);
+// app.engine('handlebars', hbs.engine);
+
+// const exphbs = require("express-handlebars");
+// app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+// app.set("view engine", "handlebars");
+
 
 // Routes
 
@@ -40,7 +49,7 @@ app.engine('handlebars', hbs.engine);
 //     // grab the name from the path provided
 //     const name = req.params.name;
 //     // render the greetings view, passing along the name
-//     res.render('greetings.handlebars', { name });
+//     res.render('greetings', { name });
 // })
 
 app.get('/', (req, res) => {
@@ -55,7 +64,7 @@ app.get('/', (req, res) => {
         // store the gifs we get back from the search
         const gifs = response;
         // pass the gifs as an object into the home page
-        res.render('home.handlebars', { gifs })
+        res.render('home', { gifs })
     }).catch(console.error);
 })
 
