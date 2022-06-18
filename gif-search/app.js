@@ -5,7 +5,7 @@ console.log("process.env", process.env);
 // Require tenorjs near the top of the file
 const Tenor = require("tenorjs").client({
     // Replace with your own key
-    // "Key": "AIzaSyCN00VQa2GAaa9rPbP9DkhEJhuK1MD0lKs", // https://tenor.com/developer/keyregistration
+    // https://tenor.com/developer/keyregistration
     "Key": process.env.KEY, // https://tenor.com/developer/keyregistration
     "Filter": "off", // "off", "low", "medium", "high", not case sensitive
     "Locale": "en_US", // Your locale here, case-sensitivity depends on input
