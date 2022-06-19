@@ -1,7 +1,7 @@
 // Require Libraries
 const express = require('express');
 require('dotenv').config();
-console.log("process.env", process.env);
+// console.log("process.env", process.env);
 // Require tenorjs near the top of the file
 const Tenor = require("tenorjs").client({
     // Replace with your own key
@@ -13,16 +13,17 @@ const Tenor = require("tenorjs").client({
 
 // App Setup
 const app = express();
+app.use(express.static("public"));
 
 // Middleware
-const { engine, create} = require("express-handlebars");
+const {engine, create} = require("express-handlebars");
 
 // app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 // app.set('view engine', 'handlebars');
 
 app.engine(".hbs", engine({ defaultLayout: "main", extname: ".hbs" })); 
 app.set("view engine", ".hbs");
-app.set('views', './views');
+app.set("views", "./views");
 
 // const hbs = exphbs.create({
 //     defaultLayout: 'main',
@@ -56,7 +57,7 @@ app.get('/', (req, res) => {
     // Handle the home page when we haven't queried yet
     let term = "";
     if (req.query.term) {
-        term = req.query.term
+        term = req.query.term;
     }
     // Tenor.search.Query("SEARCH KEYWORD HERE", "LIMIT HERE")
     Tenor.Search.Query(term, "10")
@@ -64,9 +65,9 @@ app.get('/', (req, res) => {
         // store the gifs we get back from the search
         const gifs = response;
         // pass the gifs as an object into the home page
-        res.render('home', { gifs })
+        res.render('home', { gifs });
     }).catch(console.error);
-})
+});
 
 // Start Server
 const PORT = 3000;
